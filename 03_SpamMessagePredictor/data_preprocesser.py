@@ -3,7 +3,7 @@ import re
 import string
 
 # 加载数据
-df = pd.read_csv('sms_pub.csv')
+df = pd.read_csv("C:/Code/data/sms_pub.csv")
 
 # 定义一个包含中文标点符号的字符串
 chinese_punctuation = '！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏﹑﹔·！？｡。'

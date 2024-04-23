@@ -10,7 +10,7 @@ import time
 time_start = time.time()
 
 # 读取数据
-df = pd.read_csv('C:/Code/python/03_SpamMessagePredictor/sms_pub_preprocessed2.csv')
+df = pd.read_csv("C:/Code/data/sms_pub_preprocessed2.csv")
 
 # 提取特征数据和目标数据
 X = df['msg_new']
@@ -39,7 +39,7 @@ cost_second_fit = time_fit - time_start - cost_hour_fit * 3600 - cost_minute_fit
 print('cost time of fit: %d h %d m %d s' % (cost_hour_fit, cost_minute_fit, cost_second_fit))
 
 # 保存模型
-dump(pipe, 'best_nb.joblib')
+dump(pipe, "C:/Code/python/03_SpamMessagePredictor/best_svc.joblib")
 
 # 输出模型的准确率
 print('Accuracy: ', pipe.score(X_test, y_test))

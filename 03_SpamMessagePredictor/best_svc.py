@@ -9,7 +9,7 @@ from sklearn.pipeline import Pipeline
 time_start = time.time()
 
 # 读取数据
-df = pd.read_csv('C:/Code/python/03_SpamMessagePredictor/sms_pub_preprocessed2.csv')
+df = pd.read_csv("C:/Code/data/sms_pub_preprocessed2.csv")
 
 # 提取特征数据和目标数据
 X = df['msg_new']
@@ -31,7 +31,7 @@ pipe = Pipeline([
 pipe.fit(X_train, y_train)
 
 # 保存你的Pipeline
-dump(pipe, 'pipeline.joblib')
+dump(pipe, "C:/Code/python/03_SpamMessagePredictor/best_svc.joblib")
 
 time_fit = time.time()
 cost_time_fit = time_fit - time_start
