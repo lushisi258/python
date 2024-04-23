@@ -1,0 +1,98 @@
+import random
+import math
+
+def MCTS(rootstate, itermax):
+    # 对局状态
+    class State:
+        def __init__(self):
+            self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+            self.playerJustMoved = 2  # 在这个状态之前进行移动的玩家
+
+        def clone(self):
+            st = State()
+            st.board = [self.board[i][:] for i in range(len(self.board))]
+            st.playerJustMoved = self.playerJustMoved
+            return st
+
+        def do_move(self, move):
+            assert self.board[move[0]][move[1]] == 0
+            self.playerJustMoved = 3 - self.playerJustMoved
+            self.board[move[0]][move[1]] = self.playerJustMoved
+
+        def get_moves(self):
+            return [(i, j) for i in range(3) for j in range(3) if self.board[i][j] == 0]
+
+        def get_result(self, playerjm):
+            for (x, y, z) in [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]:
+                if self.board[x//3][x%3] == self.board[y//3][y%3] == self.board[z//3][z%3]:
+                    if self.board[x//3][x%3] == playerjm:
+                        return 1.0
+                    else:
+                        return 0.0
+            if self.get_moves() == []:
+                return 0.5  # 平局
+            return None  # 游戏尚未结束
+        
+    # 蒙特卡洛树搜索
+    class Node:
+        # 蒙特卡洛树搜索的节点
+        def __init__(self, move=None, parent=None, state=None):
+            self.move = move            # 从父节点到达此节点的路径
+            self.parentNode = parent    # 父节点
+            self.childNodes = []        # 可选的子节点
+            self.wins = 0               # 此节点超过对手的棋子数量
+            self.visits = 0             # 此节点被访问的次数
+            self.untriedActions = state.get_moves()               # 此节点未尝试的action
+
+        # 选择最好的子节点
+        def UCTSelectChild(self):
+            # UCB1算法：选择最大的UCB值，其中第一项为此节点的胜率，第二项为此节点被访问的次数，第三项为父节点被访问的次数
+            s = sorted(self.childNodes, key=lambda c: c.wins/c.visits + math.sqrt(2*math.log(self.visits)/c.visits))[-1]
+            return s
+
+        # 添加子节点
+        def add_child(self, a, s):
+            # 添加子节点，从untriedActions中删除此action，a为action，s为新的状态，并返回新的节点
+            n = Node(action=a, parent=self, state=s)
+            self.untriedActions.remove(a)
+            self.childNodes.append(n)
+            return n
+
+        # 更新节点的胜率和访问次数，result为超过对手的棋子数量
+        def update(self, result):
+            self.visits += 1
+            self.wins += result
+
+    # MCTS的根节点，rootstate为选择前的棋盘状态
+    rootnode = Node(state=rootstate)
+
+    # 迭代，itermax为迭代次数
+    for _ in range(itermax):
+        node = rootnode             # 从根节点开始迭代
+        state = rootstate.clone()   # 复制当前状态
+
+        # Selection 
+        # 选择最佳子节点，如果没有可选子节点，就进入Expansion阶段
+        while node.untriedActions == [] and node.childNodes != []:
+            node = node.UCTSelectChild()
+            state.do_move(node.move)
+
+        # Expansion
+        # 如果有未尝试的action，就随机从中选择一个action，然后进入Simulation阶段
+        if node.untriedActions != []:
+            a = random.choice(node.untriedActions)
+            state.do_move(a)
+            node = node.add_child(a, state)
+
+        # Simulation
+        # 随机进行游戏直到结束，双方轮流随机选择一个action
+        while state.get_moves() != []:
+            state.do_move(random.choice(state.get_moves()))
+
+        # Backpropagation
+        # 更新所有经过的节点的胜率和访问次数
+        while node != None:
+            node.update(state.get_result(node.playerJustMoved))
+            node = node.parentNode
+
+    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].action
