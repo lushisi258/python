@@ -12,7 +12,7 @@ import joblib
 from sklearn.pipeline import Pipeline
 
 # 加载模型
-pipeline = joblib.load('C:/Code/python/03_SpamMessagePredictor/best_svc.joblib')
+pipeline = joblib.load('C:/Code/python/03_SpamMessagePredictor/best_nb.joblib')
 # 停用词表路径
 stopwords_path = 'C:/Code/python/03_SpamMessagePredictor/stopwords.txt'
 # 定义一个包含中文标点符号的字符串
