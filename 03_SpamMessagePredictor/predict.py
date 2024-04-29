@@ -55,6 +55,3 @@ def predict(message):
     proba = list(pipeline.predict_proba([message])[0])
     
     return label, proba
-
-label, proba = predict('医生 拿 着 我 的 报告单 说 ： 幸亏 你 来 的 早 啊')
-print(label, proba)

@@ -4,9 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from joblib import dump
 import pandas as pd
-import time
 
-time_start = time.time()
 
 # 读取数据
 df = pd.read_csv("C:/Code/data/sms_pub_preprocessed2.csv")
@@ -30,22 +28,8 @@ pipe = Pipeline([
 # 使用pipeline进行训练
 pipe.fit(X_train, y_train)
 
-time_fit = time.time()
-cost_time_fit = time_fit - time_start
-cost_hour_fit = (time_fit - time_start) // 3600
-cost_minute_fit = (time_fit - time_start - cost_hour_fit * 3600) // 60
-cost_second_fit = time_fit - time_start - cost_hour_fit * 3600 - cost_minute_fit * 60
-print('cost time of fit: %d h %d m %d s' % (cost_hour_fit, cost_minute_fit, cost_second_fit))
-
 # 保存模型
 dump(pipe, "C:/Code/python/03_SpamMessagePredictor/best_nb.joblib")
 
 # 输出模型的准确率
 print('Accuracy: ', pipe.score(X_test, y_test))
-
-time_end = time.time()
-cost_time = time_end - time_start
-cost_hour = (time_end - time_start) // 3600
-cost_minute = (time_end - time_start - cost_hour * 3600) // 60
-cost_second = time_end - time_start - cost_hour * 3600 - cost_minute * 60
-print('cost time: %d h %d m %d s' % (cost_hour, cost_minute, cost_second))
