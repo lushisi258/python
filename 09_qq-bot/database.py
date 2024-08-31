@@ -60,7 +60,6 @@ class ChatDatabase:
     def get_prompt(self, openid):
         self.cursor.execute("SELECT prompt FROM user WHERE openid = ?", (openid,))
         result = self.cursor.fetchone()
-        print("database prompt result:", result)
         return result[0] if result else None
 
     # 读取limit条c2c消息并返回消息列表

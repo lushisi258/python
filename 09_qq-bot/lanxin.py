@@ -42,7 +42,6 @@ class VivoLanXin70B():
         # header部分
         headers = gen_sign_headers(self.APP_ID, self.APP_KEY, self.METHOD, self.URI, params)
         url = 'https://{}{}'.format(self.DOMAIN, self.URI)
-        print(messages)
         response = requests.post(url, json=data, headers=headers, params=params)
         print("rep code:", response.status_code)
         # 对response进行处理

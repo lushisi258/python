@@ -1,8 +1,12 @@
 .vscode/
 venv/
+__pycache__/
 *.pyc
 *.ini
 *.log
+*.npz
+*.csv
 *.json
+*.joblib
 qbot
 test.py
