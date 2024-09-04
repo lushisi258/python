@@ -12,10 +12,13 @@ APP_KEY = config['vivo']['app_key']
 # 聊天bot配置设置
 appid = config['qbot']['qbot_id']
 secret = config['qbot']['qbot_secret']
+# 数据库配置设置
+user_name = config['database']['user_name']
+db_password = config['database']['password']
 
 if __name__ == "__main__":
     # 设置bot要监听的事件（群消息，私聊消息）
     intents = botpy.Intents(public_messages = True) 
     # 创建聊天bot的实例
-    client = JaneClient(intents=intents, appid=APP_ID, appkey=APP_KEY)
+    client = JaneClient(intents=intents, appid=APP_ID, appkey=APP_KEY, user_name=user_name, db_password=db_password)
     client.run(appid = appid, secret = secret) 

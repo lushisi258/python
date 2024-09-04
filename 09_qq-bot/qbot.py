@@ -6,12 +6,12 @@ from database import ChatDatabase
 
 # 聊天bot
 class JaneClient(botpy.Client):
-    def __init__(self, appid, appkey, *args, **kwargs):
+    def __init__(self, appid, appkey, user_name, db_password, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 在bot创建时内部初始化一个大模型实例
         self.lanxin = VivoLanXin70B(appid, appkey)
         # 在bot创建时连接数据库
-        self.database = ChatDatabase("qbot")
+        self.database = ChatDatabase(db_name="qbot", host="10.130.201.38", user=user_name, password=db_password)
 
     async def on_ready(self):
         print("Bot is ready")
