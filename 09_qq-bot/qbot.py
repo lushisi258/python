@@ -9,6 +9,7 @@ from database import ChatDatabase
 class JaneClient(botpy.Client):
     def __init__(self, appid, appkey, user_name, db_password, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.local_ip = self.get_local_ip()
         # 在bot创建时内部初始化一个大模型实例
         self.lanxin = VivoLanXin70B(appid, appkey)
@@ -16,7 +17,9 @@ class JaneClient(botpy.Client):
         self.database = ChatDatabase(db_name="qbot", host=self.local_ip, user=user_name, password=db_password)
 
     def get_local_ip(self):
-        return socket.gethostbyname(socket.gethostname())
+        self.socket.connect(('8.8.8.8', 80))
+        local_ip = self.socket.getsockname()[0]
+        return local_ip
 
 
     async def on_ready(self):

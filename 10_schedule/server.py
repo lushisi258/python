@@ -20,9 +20,16 @@ class webSocket():
         print(f"{color_code}[{class_name}]{Style.RESET_ALL}{msg}")
 
     def get_local_ip(self):
-        # 先获取主机名，然后根据主机名获取局域网IP地址
-        local_ip = socket.gethostbyname(socket.gethostname())
-        self.output(msg=f"Local IP: {local_ip}", color="YELLOW")
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            # 连接到一个外部地址（不需要实际发送数据）
+            s.connect(('8.8.8.8', 80))
+            local_ip = s.getsockname()[0]
+            self.output
+        except Exception:
+            local_ip = '127.0.0.1'
+        finally:
+            s.close()
         return local_ip
 
     def start(self):
