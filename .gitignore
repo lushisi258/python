@@ -8,5 +8,6 @@ __pycache__/
 *.csv
 *.json
 *.joblib
+*.ipynb
 qbot
 test.py
